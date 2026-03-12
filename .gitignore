@@ -1,0 +1,6 @@
+# Environment files
+.env
+env
+
+# Service account keys
+serviceAccountKey.json
