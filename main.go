@@ -30,16 +30,13 @@ type Comment struct {
 }
 
 func LoadEnv() {
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatal("Error loading env file")
-	}
+
+	_ = godotenv.Load(".env")
 
 	ServiceAccountKeyPath = os.Getenv("SERVICE_ACCOUNT_KEY_PATH")
 	ProjectID = os.Getenv("PROJECT_ID")
 	FirebaseAPIKey = os.Getenv("FIREBASE_API_KEY")
 	JWTSecret = os.Getenv("JWT_SECRET_KEY")
-
 }
 
 func main() {
