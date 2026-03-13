@@ -52,6 +52,8 @@ func main() {
 
 	r := grit.NewRouter()
 	protect := grit.FirebaseProtected(JWTSecret)
+	adminOnly := grit.RequirePermission(JWTSecret, "admin:all")
+	userRead := grit.RequirePermission(JWTSecret, "user:read")
 
 	// Auth
 	r.Post("/auth/signup", grit.FirebaseSignupWithEmail(JWTSecret))
@@ -60,12 +62,12 @@ func main() {
 	r.Get("/auth/me", protect(grit.FirebaseMeHandler))
 
 	// Posts CRUD
-	r.Post("/posts/create", protect(grit.FirestoreC("posts")))
+	r.Post("/posts/create", adminOnly(protect(grit.FirestoreC("posts"))))
 	r.Get("/posts", protect(grit.FirestoreR("posts")))
-	r.Get("/post", protect(grit.FirestoreGetByID("posts")))
-	r.Put("/post", protect(grit.FirestoreU("posts")))
-	r.Patch("/post", protect(grit.FirestoreU("posts")))
-	r.Delete("/post", protect(grit.FirestoreD("posts")))
+	r.Get("/post", userRead(protect(grit.FirestoreGetByID("posts"))))
+	r.Put("/post", adminOnly(protect(grit.FirestoreU("posts"))))
+	r.Patch("/post", adminOnly(protect(grit.FirestoreU("posts"))))
+	r.Delete("/post", adminOnly(protect(grit.FirestoreD("posts"))))
 
 	// Comments CRUD
 	r.Post("/comments", protect(grit.FirestoreC("comments")))

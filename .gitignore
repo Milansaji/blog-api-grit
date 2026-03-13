@@ -4,3 +4,5 @@ env
 
 # Service account keys
 serviceAccountKey.json
+
+index.html
